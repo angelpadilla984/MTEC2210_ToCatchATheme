@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 
 {
+    public AudioClip coinClip;
+    public AudioClip hazardClip;
 
     public GameManager gm;
     public float speed = 15;
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,20 +33,28 @@ public class PlayerControl : MonoBehaviour
 
     //}
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.gameObject.tag == "Coin")
+        if (collider.tag == "Coin")
         {
             gm.IncrementScore(1);
-            Destroy(collision.gameObject);
+
+            gm.PlaySound(coinClip);
+            Destroy(collider.gameObject);
         }
 
-        if (collision.gameObject.tag == "Hazard")
+        if (collider.tag == "Hazard")
         {
+            gm.PlaySound(hazardClip);
             Destroy(gameObject);
         }
-        //Destroy(gameObject);
-        Debug.Log("Triggered");
+
+        if (collider.tag == "Theme")
+        {
+            Destroy(collider.gameObject);
+            Debug.Log("Theme Changed");
+        }
+
 
     }
 }
