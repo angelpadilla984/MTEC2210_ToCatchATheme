@@ -10,12 +10,16 @@ public class PlayerControl : MonoBehaviour
 
     public GameManager gm;
     public float speed = 15;
+    public float jumpSpeed = 1;
+    private Rigidbody2D rb;
+
+    bool jumping;
 
 
     // Start is called before the first frame update
     void Start()
     {
-
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -25,6 +29,12 @@ public class PlayerControl : MonoBehaviour
 
         //Debug.Log("xMove:" + xMove);
         transform.Translate(xMove * speed * Time.deltaTime, 0, 0);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumping = true;
+        }
+
     }
 
     // private void OnCollisionEnter2D(Collision2D collision)
@@ -54,8 +64,25 @@ public class PlayerControl : MonoBehaviour
             Destroy(collider.gameObject);
             Debug.Log("Theme Changed");
         }
+    }
+    private void FixedUpdate()
+    {
+            if (Input.GetKey(KeyCode.A))
+            {
+                rb.velocity = new Vector2(-speed * Time.deltaTime, rb.velocity.y);
+            }
 
+            if (Input.GetKey(KeyCode.D))
+            {
+                rb.velocity = new Vector2(speed * Time.deltaTime, rb.velocity.y);
+            }
 
+            if (jumping == true)
+            {
+                rb.velocity = Vector2.up * jumpSpeed;
+                jumping = false;
+            }
+    
     }
 }
 
